@@ -5,7 +5,6 @@ interface ProjectCardProps {
   description: string;
   href?: string;
   comingSoon?: boolean;
-  accentColor?: string;
 }
 
 export function ProjectCard({
@@ -13,34 +12,33 @@ export function ProjectCard({
   description,
   href,
   comingSoon = false,
-  accentColor = "from-violet-500 to-purple-500",
 }: ProjectCardProps) {
   const cardContent = (
     <div
       className={`
-        group relative overflow-hidden rounded-2xl bg-white p-6
-        shadow-md transition-all duration-300
-        ${comingSoon ? "opacity-60" : "hover:shadow-xl hover:-translate-y-1"}
+        group relative overflow-hidden rounded-2xl p-8
+        glass transition-all duration-500 ease-out
+        ${comingSoon
+          ? "opacity-50 cursor-default"
+          : "glass-hover hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/10 cursor-pointer"
+        }
       `}
     >
-      <div
-        className={`
-          absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${accentColor}
-          transition-all duration-300 group-hover:h-1.5
-        `}
-      />
-      <h3 className="mt-2 text-xl font-semibold text-gray-800">{title}</h3>
-      <p className="mt-2 text-gray-600">{description}</p>
-      {comingSoon && (
-        <span className="mt-4 inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-500">
+      <h3 className="text-2xl font-bold text-white tracking-tight">
+        {title}
+      </h3>
+      <p className="mt-3 text-white/60 leading-relaxed">
+        {description}
+      </p>
+      {comingSoon ? (
+        <span className="mt-6 inline-block rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-white/40 uppercase tracking-wider">
           Coming Soon
         </span>
-      )}
-      {!comingSoon && (
-        <span className="mt-4 inline-flex items-center text-sm font-medium text-violet-600 group-hover:text-violet-700">
+      ) : (
+        <span className="mt-6 inline-flex items-center text-sm font-medium text-white/80 group-hover:text-white transition-colors">
           Explore
           <svg
-            className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1"
+            className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -49,7 +47,7 @@ export function ProjectCard({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M9 5l7 7-7 7"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
             />
           </svg>
         </span>

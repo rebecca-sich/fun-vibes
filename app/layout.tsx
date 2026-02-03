@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Syne, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+});
 
 export const metadata: Metadata = {
-  title: "Fun Vibes",
-  description: "A collection of fun vibe-coded projects",
+  title: "Good Vibes All The Time",
+  description: "Vibe-coded projects that spark joy",
 };
 
 export default function RootLayout({
@@ -16,7 +23,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.variable} ${syne.variable} ${cormorant.variable} font-sans`}>
+        {children}
+      </body>
     </html>
   );
 }
