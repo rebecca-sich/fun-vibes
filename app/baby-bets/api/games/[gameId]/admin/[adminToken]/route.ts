@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getGame, getGameByAdminToken, updateGame, getSubmissions, getVotes } from "@/lib/baby-bets/db";
+import { getGame, getGameByAdminToken, updateGame, deleteGame, getSubmissions, getVotes } from "@/lib/baby-bets/db";
 
 export async function GET(
   request: NextRequest,
@@ -107,6 +107,35 @@ export async function POST(
     console.error("Error processing admin action:", error);
     return NextResponse.json(
       { error: "Failed to process action" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ gameId: string; adminToken: string }> }
+) {
+  try {
+    const { gameId, adminToken } = await params;
+
+    // Verify admin token
+    const gameByToken = await getGameByAdminToken(adminToken);
+    if (!gameByToken || gameByToken.id !== gameId) {
+      return NextResponse.json(
+        { error: "Invalid admin token" },
+        { status: 404 }
+      );
+    }
+
+    // Delete the game and all associated data
+    await deleteGame(gameId, adminToken);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting game:", error);
+    return NextResponse.json(
+      { error: "Failed to delete game" },
       { status: 500 }
     );
   }

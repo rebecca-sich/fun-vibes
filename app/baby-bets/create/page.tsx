@@ -19,6 +19,7 @@ export default function CreateGamePage() {
 
   const [formData, setFormData] = useState({
     name: "",
+    createdBy: "",
     gender: "surprise" as BabyGender,
     password: "",
     submissionStart: formatDateForInput(now),
@@ -145,6 +146,23 @@ export default function CreateGamePage() {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="mt-1.5 w-full border-2 border-rose-200 bg-white px-4 py-2.5 font-serif text-rose-900 placeholder:text-rose-300 focus:border-rose-400 focus:outline-none focus:ring-rose-400/20"
                 />
+              </div>
+
+              <div>
+                <label className="block font-serif text-base text-rose-800">
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Who's running this game?"
+                  value={formData.createdBy}
+                  onChange={(e) => setFormData({ ...formData, createdBy: e.target.value })}
+                  className="mt-1.5 w-full border-2 border-rose-200 bg-white px-4 py-2.5 font-serif text-rose-900 placeholder:text-rose-300 focus:border-rose-400 focus:outline-none focus:ring-rose-400/20"
+                />
+                <p className="mt-1 font-serif text-xs italic text-rose-500">
+                  This will be shown as &ldquo;Managed by [your name]&rdquo;
+                </p>
               </div>
 
               <div>

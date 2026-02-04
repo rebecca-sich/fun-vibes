@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
 
     const {
       name,
+      createdBy,
       gender,
       password,
       submissionStart,
@@ -19,6 +20,7 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     const missing = [];
     if (!name) missing.push("name");
+    if (!createdBy) missing.push("createdBy");
     if (!gender) missing.push("gender");
     if (!submissionStart) missing.push("submissionStart");
     if (!votingStart) missing.push("votingStart");
@@ -36,6 +38,7 @@ export async function POST(request: NextRequest) {
       id: nanoid(10),
       adminToken: nanoid(20),
       name,
+      createdBy,
       gender,
       password: password || undefined,
       submissionStart,

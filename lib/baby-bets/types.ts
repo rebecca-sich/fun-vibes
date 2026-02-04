@@ -6,6 +6,7 @@ export interface Game {
   id: string;
   adminToken: string;
   name: string;
+  createdBy: string;
   password?: string;
   gender: BabyGender;
 

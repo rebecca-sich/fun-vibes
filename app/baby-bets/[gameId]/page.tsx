@@ -327,6 +327,11 @@ export default function GamePage() {
           <h1 className={`font-display text-4xl font-bold tracking-tight ${theme.textPrimary} sm:text-5xl`}>
             {game.name}
           </h1>
+          {game.createdBy && (
+            <p className={`mt-2 font-serif italic ${theme.textSecondary}`}>
+              Managed by {game.createdBy}
+            </p>
+          )}
           <div className="mt-4 flex items-center justify-center gap-2">
             <span
               className={`border ${theme.borderAccent} px-3 py-1 font-serif text-sm ${theme.badgeText}`}

@@ -50,6 +50,11 @@ export default function AdminPage() {
   // Copy state
   const [copied, setCopied] = useState(false);
 
+  // Delete state
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -122,6 +127,30 @@ export default function AdminPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDelete = async () => {
+    setDeleting(true);
+    setDeleteError(null);
+
+    try {
+      const res = await fetch(`/baby-bets/api/games/${gameId}/admin/${adminToken}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setDeleteError(data.error || "Failed to delete game");
+        return;
+      }
+
+      // Redirect to home page after deletion
+      window.location.href = "/baby-bets";
+    } catch {
+      setDeleteError("Failed to delete game. Please try again.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (loading) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-rose-50 via-pink-50 to-amber-50">
@@ -192,9 +221,11 @@ export default function AdminPage() {
               Admin
             </span>
           </div>
-          <p className={`mt-2 font-serif italic ${theme.textSecondary}`}>
-            Game Master Dashboard
-          </p>
+          {game.createdBy && (
+            <p className={`mt-2 font-serif italic ${theme.textSecondary}`}>
+              Managed by {game.createdBy}
+            </p>
+          )}
         </header>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2">
@@ -435,6 +466,63 @@ export default function AdminPage() {
               <p className={`font-serif italic ${theme.textMuted}`}>
                 No guesses yet.
               </p>
+            )}
+          </div>
+        </div>
+
+        {/* Danger Zone */}
+        <div className="mt-8 border-2 border-red-300 bg-white/90 p-1.5">
+          <div className="border border-red-200 p-6">
+            <h2 className="font-serif text-xl text-red-800">
+              Danger Zone
+            </h2>
+            <div className="my-4 border-t border-red-200" />
+
+            {!showDeleteConfirm ? (
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-serif text-red-800">Delete this game</p>
+                  <p className="font-serif text-sm italic text-red-600/70">
+                    This will permanently remove the game and all submissions.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="border-2 border-red-400 bg-white px-4 py-2 font-serif font-medium text-red-700 transition-colors hover:bg-red-50"
+                >
+                  Delete Game
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <p className="font-serif text-red-800">
+                  Are you sure you want to delete <strong>{game.name}</strong>? This action cannot be undone.
+                </p>
+                {deleteError && (
+                  <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3 font-serif text-sm text-red-700">
+                    {deleteError}
+                  </div>
+                )}
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleDelete}
+                    disabled={deleting}
+                    className="border-2 border-red-500 bg-red-500 px-4 py-2 font-serif font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
+                  >
+                    {deleting ? "Deleting..." : "Yes, Delete Game"}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowDeleteConfirm(false);
+                      setDeleteError(null);
+                    }}
+                    disabled={deleting}
+                    className="border-2 border-gray-300 bg-white px-4 py-2 font-serif font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         </div>
