@@ -8,13 +8,16 @@ const redis = new Redis({
   token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || "",
 });
 
-// Key helpers
+// Environment helper for dev/prod separation
+const getEnv = () => process.env.NODE_ENV || "development";
+
+// Key helpers - prefixed with environment to separate dev/prod data
 const keys = {
-  game: (id: string) => `game:${id}`,
-  gameByAdmin: (adminToken: string) => `game:admin:${adminToken}`,
-  submissions: (gameId: string) => `game:${gameId}:submissions`,
-  votes: (gameId: string) => `game:${gameId}:votes`,
-  allGames: () => "games:all",
+  game: (id: string) => `game:${getEnv()}:${id}`,
+  gameByAdmin: (adminToken: string) => `game:${getEnv()}:admin:${adminToken}`,
+  submissions: (gameId: string) => `game:${getEnv()}:${gameId}:submissions`,
+  votes: (gameId: string) => `game:${getEnv()}:${gameId}:votes`,
+  allGames: () => `games:${getEnv()}:all`,
 };
 
 // Game operations
