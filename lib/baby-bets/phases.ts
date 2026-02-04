@@ -7,19 +7,18 @@ export function getGamePhase(game: Game): GamePhase {
 
   const now = new Date();
   const submissionStart = new Date(game.submissionStart);
-  const submissionEnd = new Date(game.submissionEnd);
   const votingStart = new Date(game.votingStart);
-  const votingEnd = new Date(game.votingEnd);
+  const revealDate = new Date(game.revealDate);
 
   if (now < submissionStart) {
     return "pre-game";
   }
 
-  if (now >= submissionStart && now < submissionEnd) {
+  if (now >= submissionStart && now < votingStart) {
     return "submission";
   }
 
-  if (now >= votingStart && now < votingEnd) {
+  if (now >= votingStart && now < revealDate) {
     return "voting";
   }
 

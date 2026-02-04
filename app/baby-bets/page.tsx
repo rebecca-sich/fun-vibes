@@ -14,19 +14,9 @@ export default async function BabyBetsHome() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-rose-50 via-pink-50 to-amber-50">
-      <div className="mx-auto max-w-2xl px-6 py-16 sm:py-24">
-        <Link
-          href="/"
-          className="inline-flex items-center text-sm text-rose-400 hover:text-rose-500 transition-colors"
-        >
-          <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Good Vibes
-        </Link>
-
-        <header className="mt-8 text-center">
+    <main className="flex min-h-screen flex-col bg-gradient-to-b from-rose-50 via-pink-50 to-amber-50">
+      <div className="mx-auto max-w-2xl flex-1 px-6 py-16 sm:py-24">
+        <header className="text-center">
           <h1 className="font-display text-4xl font-bold tracking-tight text-rose-900 sm:text-5xl">
             Baby Bets
           </h1>
@@ -91,6 +81,18 @@ export default async function BabyBetsHome() {
           </div>
         )}
       </div>
+
+      <footer className="pb-8 text-center">
+        <p className="text-sm text-rose-400">
+          Part of the{" "}
+          <Link
+            href="/"
+            className="font-medium text-rose-500 hover:text-rose-600 transition-colors"
+          >
+            Good Vibes Projects
+          </Link>
+        </p>
+      </footer>
     </main>
   );
 }

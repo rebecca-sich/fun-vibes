@@ -12,16 +12,22 @@ export async function POST(request: NextRequest) {
       gender,
       password,
       submissionStart,
-      submissionEnd,
       votingStart,
-      votingEnd,
       revealDate,
     } = body;
 
     // Validate required fields
-    if (!name || !gender || !submissionStart || !submissionEnd || !votingStart || !votingEnd || !revealDate) {
+    const missing = [];
+    if (!name) missing.push("name");
+    if (!gender) missing.push("gender");
+    if (!submissionStart) missing.push("submissionStart");
+    if (!votingStart) missing.push("votingStart");
+    if (!revealDate) missing.push("revealDate");
+
+    if (missing.length > 0) {
+      console.log("Missing fields:", missing, "Body received:", body);
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: `Missing required fields: ${missing.join(", ")}` },
         { status: 400 }
       );
     }
@@ -33,9 +39,7 @@ export async function POST(request: NextRequest) {
       gender,
       password: password || undefined,
       submissionStart,
-      submissionEnd,
       votingStart,
-      votingEnd,
       revealDate,
       createdAt: new Date().toISOString(),
       isRevealed: false,

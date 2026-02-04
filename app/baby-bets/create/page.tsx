@@ -8,12 +8,12 @@ export default function CreateGamePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [adminUrl, setAdminUrl] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
-  // Default dates: start now, submissions for 2 weeks, voting for 1 week, reveal after
+  // Default dates: start now, voting in 2 weeks, reveal in 3 weeks
   const now = new Date();
   const twoWeeks = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
   const threeWeeks = new Date(now.getTime() + 21 * 24 * 60 * 60 * 1000);
-  const fourWeeks = new Date(now.getTime() + 28 * 24 * 60 * 60 * 1000);
 
   const formatDateForInput = (date: Date) => date.toISOString().slice(0, 16);
 
@@ -22,10 +22,8 @@ export default function CreateGamePage() {
     gender: "surprise" as BabyGender,
     password: "",
     submissionStart: formatDateForInput(now),
-    submissionEnd: formatDateForInput(twoWeeks),
     votingStart: formatDateForInput(twoWeeks),
-    votingEnd: formatDateForInput(threeWeeks),
-    revealDate: formatDateForInput(fourWeeks),
+    revealDate: formatDateForInput(threeWeeks),
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,9 +38,7 @@ export default function CreateGamePage() {
         body: JSON.stringify({
           ...formData,
           submissionStart: new Date(formData.submissionStart).toISOString(),
-          submissionEnd: new Date(formData.submissionEnd).toISOString(),
           votingStart: new Date(formData.votingStart).toISOString(),
-          votingEnd: new Date(formData.votingEnd).toISOString(),
           revealDate: new Date(formData.revealDate).toISOString(),
         }),
       });
@@ -88,10 +84,18 @@ export default function CreateGamePage() {
 
             <div className="mt-6 flex flex-col gap-3">
               <button
-                onClick={() => navigator.clipboard.writeText(`${window.location.origin}${adminUrl}`)}
-                className="w-full rounded-xl bg-rose-500 px-4 py-3 font-medium text-white transition-colors hover:bg-rose-600"
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}${adminUrl}`);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                className={`w-full rounded-xl px-4 py-3 font-medium text-white transition-colors ${
+                  copied
+                    ? "bg-green-500"
+                    : "bg-rose-500 hover:bg-rose-600"
+                }`}
               >
-                Copy Admin Link
+                {copied ? "Copied!" : "Copy Admin Link"}
               </button>
               <Link
                 href={adminUrl}
@@ -186,10 +190,10 @@ export default function CreateGamePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-rose-800">
-                Submissions Start
+                Submissions Open
               </label>
               <input
                 type="datetime-local"
@@ -199,24 +203,9 @@ export default function CreateGamePage() {
                 className="mt-1 w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-rose-900 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400/20"
               />
             </div>
-            <div>
+            <div className="mt-4">
               <label className="block text-sm font-medium text-rose-800">
-                Submissions End
-              </label>
-              <input
-                type="datetime-local"
-                required
-                value={formData.submissionEnd}
-                onChange={(e) => setFormData({ ...formData, submissionEnd: e.target.value })}
-                className="mt-1 w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-rose-900 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400/20"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-rose-800">
-                Voting Starts
+                Voting Opens
               </label>
               <input
                 type="datetime-local"
@@ -225,35 +214,25 @@ export default function CreateGamePage() {
                 onChange={(e) => setFormData({ ...formData, votingStart: e.target.value })}
                 className="mt-1 w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-rose-900 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400/20"
               />
+              <p className="mt-1 text-xs text-rose-500">
+                Submissions close when voting opens.
+              </p>
             </div>
-            <div>
+            <div className="mt-4">
               <label className="block text-sm font-medium text-rose-800">
-                Voting Ends
+                Reveal Date
               </label>
               <input
                 type="datetime-local"
                 required
-                value={formData.votingEnd}
-                onChange={(e) => setFormData({ ...formData, votingEnd: e.target.value })}
+                value={formData.revealDate}
+                onChange={(e) => setFormData({ ...formData, revealDate: e.target.value })}
                 className="mt-1 w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-rose-900 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400/20"
               />
+              <p className="mt-1 text-xs text-rose-500">
+                Voting closes at reveal. You can reveal early.
+              </p>
             </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-rose-800">
-              Reveal Date
-            </label>
-            <input
-              type="datetime-local"
-              required
-              value={formData.revealDate}
-              onChange={(e) => setFormData({ ...formData, revealDate: e.target.value })}
-              className="mt-1 w-full rounded-xl border border-rose-200 bg-white px-4 py-3 text-rose-900 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400/20"
-            />
-            <p className="mt-1 text-xs text-rose-500">
-              You can reveal early from the admin panel.
-            </p>
           </div>
 
           {error && (

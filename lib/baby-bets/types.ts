@@ -9,12 +9,10 @@ export interface Game {
   password?: string;
   gender: BabyGender;
 
-  // Dates (ISO strings)
-  submissionStart: string;
-  submissionEnd: string;
-  votingStart: string;
-  votingEnd: string;
-  revealDate: string;
+  // Dates (ISO strings) - each phase ends when the next begins
+  submissionStart: string; // submissions open
+  votingStart: string; // submissions close, voting opens
+  revealDate: string; // voting closes, awaiting reveal
   createdAt: string;
 
   // Reveal data (set by GM)
