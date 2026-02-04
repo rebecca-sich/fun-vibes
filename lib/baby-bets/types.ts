@@ -16,6 +16,9 @@ export interface Game {
   revealDate: string; // voting closes, awaiting reveal
   createdAt: string;
 
+  // Game configuration
+  hideGuesses?: boolean; // Hide guesses list during submission phase
+
   // Reveal data (set by GM)
   actualName?: {
     first: string;

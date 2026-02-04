@@ -99,6 +99,62 @@ export async function POST(
       return NextResponse.json({ game: updatedGame });
     }
 
+    if (action === "updateSettings") {
+      const { submissionStart, votingStart, revealDate, hideGuesses } = body;
+
+      // Validate that at least one setting is being updated
+      if (
+        submissionStart === undefined &&
+        votingStart === undefined &&
+        revealDate === undefined &&
+        hideGuesses === undefined
+      ) {
+        return NextResponse.json(
+          { error: "No settings provided to update" },
+          { status: 400 }
+        );
+      }
+
+      // Build updated game object
+      const updatedGame = { ...game };
+
+      if (submissionStart !== undefined) {
+        updatedGame.submissionStart = submissionStart;
+      }
+      if (votingStart !== undefined) {
+        updatedGame.votingStart = votingStart;
+      }
+      if (revealDate !== undefined) {
+        updatedGame.revealDate = revealDate;
+      }
+      if (hideGuesses !== undefined) {
+        updatedGame.hideGuesses = hideGuesses;
+      }
+
+      // Validate date ordering
+      const subStart = new Date(updatedGame.submissionStart);
+      const voteStart = new Date(updatedGame.votingStart);
+      const reveal = new Date(updatedGame.revealDate);
+
+      if (voteStart <= subStart) {
+        return NextResponse.json(
+          { error: "Voting start must be after submissions start" },
+          { status: 400 }
+        );
+      }
+
+      if (reveal <= voteStart) {
+        return NextResponse.json(
+          { error: "Reveal date must be after voting start" },
+          { status: 400 }
+        );
+      }
+
+      await updateGame(updatedGame);
+
+      return NextResponse.json({ game: updatedGame });
+    }
+
     return NextResponse.json(
       { error: "Unknown action" },
       { status: 400 }

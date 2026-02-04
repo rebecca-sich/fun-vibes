@@ -15,6 +15,10 @@ function formatDate(dateStr: string): string {
   });
 }
 
+function formatDateForInput(dateStr: string): string {
+  return new Date(dateStr).toISOString().slice(0, 16);
+}
+
 function getPhase(game: Game): string {
   if (game.isRevealed) return "revealed";
   const now = new Date();
@@ -55,6 +59,18 @@ export default function AdminPage() {
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
+  // Settings form state
+  const [isEditingSettings, setIsEditingSettings] = useState(false);
+  const [settingsForm, setSettingsForm] = useState({
+    submissionStart: "",
+    votingStart: "",
+    revealDate: "",
+    hideGuesses: false,
+  });
+  const [savingSettings, setSavingSettings] = useState(false);
+  const [settingsError, setSettingsError] = useState<string | null>(null);
+  const [settingsSuccess, setSettingsSuccess] = useState(false);
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -71,6 +87,13 @@ export default function AdminPage() {
         setGame(data.game);
         setSubmissions(data.submissions || []);
         setVotes(data.votes || []);
+        // Initialize settings form with current values
+        setSettingsForm({
+          submissionStart: formatDateForInput(data.game.submissionStart),
+          votingStart: formatDateForInput(data.game.votingStart),
+          revealDate: formatDateForInput(data.game.revealDate),
+          hideGuesses: data.game.hideGuesses || false,
+        });
       } catch {
         setError("Failed to load game");
       } finally {
@@ -148,6 +171,43 @@ export default function AdminPage() {
       setDeleteError("Failed to delete game. Please try again.");
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingSettings(true);
+    setSettingsError(null);
+    setSettingsSuccess(false);
+
+    try {
+      const res = await fetch(`/baby-bets/api/games/${gameId}/admin/${adminToken}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "updateSettings",
+          submissionStart: new Date(settingsForm.submissionStart).toISOString(),
+          votingStart: new Date(settingsForm.votingStart).toISOString(),
+          revealDate: new Date(settingsForm.revealDate).toISOString(),
+          hideGuesses: settingsForm.hideGuesses,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setSettingsError(data.error || "Failed to save settings");
+        return;
+      }
+
+      const data = await res.json();
+      setGame(data.game);
+      setSettingsSuccess(true);
+      setIsEditingSettings(false);
+      setTimeout(() => setSettingsSuccess(false), 3000);
+    } catch {
+      setSettingsError("Failed to save settings. Please try again.");
+    } finally {
+      setSavingSettings(false);
     }
   };
 
@@ -262,48 +322,173 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Game Status Card */}
+          {/* Game Settings Card */}
           <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5`}>
             <div className={`border ${theme.borderInner} p-6`}>
-              <h2 className={`font-serif text-xl ${theme.textPrimary}`}>
-                Game Status
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className={`font-serif text-xl ${theme.textPrimary}`}>
+                  Game Settings
+                </h2>
+                {!isEditingSettings && (
+                  <button
+                    onClick={() => setIsEditingSettings(true)}
+                    className={`border ${theme.borderAccent} px-3 py-1 font-serif text-sm ${theme.textPrimary} transition-colors hover:bg-gray-50`}
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
               <div className={`my-4 border-t ${theme.borderInner}`} />
 
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className={`font-serif ${theme.textMuted}`}>Current Phase</span>
-                  <span className={`border ${theme.borderAccent} px-2 py-1 font-serif text-base ${theme.badgeText}`}>
-                    {phase === "pre-game" && "Starting Soon"}
-                    {phase === "submission" && "Submissions Open"}
-                    {phase === "voting" && "Voting Open"}
-                    {phase === "awaiting-reveal" && "Awaiting Reveal"}
-                    {phase === "revealed" && "Revealed"}
-                  </span>
+              {settingsSuccess && (
+                <div className={`mb-4 flex items-center gap-2 border-l-4 ${theme.borderAccent} bg-green-50 px-4 py-3 text-green-700`}>
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="font-serif">Settings saved!</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className={`font-serif ${theme.textMuted}`}>Submissions</span>
-                  <span className={`font-serif font-medium ${theme.textPrimary}`}>{submissions.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className={`font-serif ${theme.textMuted}`}>Total Votes</span>
-                  <span className={`font-serif font-medium ${theme.textPrimary}`}>{votes.length}</span>
-                </div>
-              </div>
+              )}
 
-              <div className={`mt-4 border-t ${theme.borderInner} pt-4`}>
-                <div className="space-y-2 text-base">
-                  <p className={`font-serif ${theme.textMuted}`}>
-                    <span className="font-medium">Submissions:</span> {formatDate(game.submissionStart)}
-                  </p>
-                  <p className={`font-serif ${theme.textMuted}`}>
-                    <span className="font-medium">Voting:</span> {formatDate(game.votingStart)}
-                  </p>
-                  <p className={`font-serif ${theme.textMuted}`}>
-                    <span className="font-medium">Reveal:</span> {formatDate(game.revealDate)}
-                  </p>
-                </div>
-              </div>
+              {isEditingSettings ? (
+                <form onSubmit={handleSaveSettings} className="space-y-4">
+                  <div className="space-y-3">
+                    <div>
+                      <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                        Submissions Open
+                      </label>
+                      <input
+                        type="datetime-local"
+                        required
+                        value={settingsForm.submissionStart}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, submissionStart: e.target.value })}
+                        className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} focus:outline-none ${theme.inputFocus}`}
+                      />
+                    </div>
+                    <div>
+                      <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                        Voting Opens
+                      </label>
+                      <input
+                        type="datetime-local"
+                        required
+                        value={settingsForm.votingStart}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, votingStart: e.target.value })}
+                        className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} focus:outline-none ${theme.inputFocus}`}
+                      />
+                      <p className={`mt-1 font-serif text-sm italic ${theme.textMuted}`}>
+                        Submissions close when voting opens.
+                      </p>
+                    </div>
+                    <div>
+                      <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                        Reveal Date
+                      </label>
+                      <input
+                        type="datetime-local"
+                        required
+                        value={settingsForm.revealDate}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, revealDate: e.target.value })}
+                        className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} focus:outline-none ${theme.inputFocus}`}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={`border-t ${theme.borderInner} pt-4`}>
+                    <label className="flex cursor-pointer items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={settingsForm.hideGuesses}
+                        onChange={(e) => setSettingsForm({ ...settingsForm, hideGuesses: e.target.checked })}
+                        className={`h-5 w-5 rounded border-2 ${theme.inputBorder} ${theme.textPrimary} focus:ring-offset-0 ${theme.inputFocus}`}
+                      />
+                      <span className={`font-serif ${theme.textPrimary}`}>
+                        Hide guesses during submission phase
+                      </span>
+                    </label>
+                    <p className={`mt-1 ml-8 font-serif text-sm italic ${theme.textMuted}`}>
+                      When enabled, players cannot see what others have guessed until voting begins.
+                    </p>
+                  </div>
+
+                  {settingsError && (
+                    <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3 font-serif text-base text-red-700">
+                      {settingsError}
+                    </div>
+                  )}
+
+                  <div className="flex gap-3">
+                    <button
+                      type="submit"
+                      disabled={savingSettings}
+                      className={`flex-1 border-2 ${theme.borderAccent} ${theme.accent} px-4 py-2.5 font-serif font-medium text-white transition-colors ${theme.accentHover} disabled:opacity-50`}
+                    >
+                      {savingSettings ? "Saving..." : "Save Settings"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsEditingSettings(false);
+                        setSettingsError(null);
+                        if (game) {
+                          setSettingsForm({
+                            submissionStart: formatDateForInput(game.submissionStart),
+                            votingStart: formatDateForInput(game.votingStart),
+                            revealDate: formatDateForInput(game.revealDate),
+                            hideGuesses: game.hideGuesses || false,
+                          });
+                        }
+                      }}
+                      disabled={savingSettings}
+                      className={`border-2 ${theme.borderOuter} bg-white px-4 py-2.5 font-serif font-medium ${theme.textPrimary} transition-colors hover:bg-gray-50 disabled:opacity-50`}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className={`font-serif ${theme.textMuted}`}>Current Phase</span>
+                      <span className={`border ${theme.borderAccent} px-2 py-1 font-serif text-base ${theme.badgeText}`}>
+                        {phase === "pre-game" && "Starting Soon"}
+                        {phase === "submission" && "Submissions Open"}
+                        {phase === "voting" && "Voting Open"}
+                        {phase === "awaiting-reveal" && "Awaiting Reveal"}
+                        {phase === "revealed" && "Revealed"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className={`font-serif ${theme.textMuted}`}>Submissions</span>
+                      <span className={`font-serif font-medium ${theme.textPrimary}`}>{submissions.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className={`font-serif ${theme.textMuted}`}>Total Votes</span>
+                      <span className={`font-serif font-medium ${theme.textPrimary}`}>{votes.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className={`font-serif ${theme.textMuted}`}>Hide Guesses</span>
+                      <span className={`font-serif font-medium ${theme.textPrimary}`}>
+                        {game.hideGuesses ? "Yes" : "No"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className={`mt-4 border-t ${theme.borderInner} pt-4`}>
+                    <div className="space-y-2 text-base">
+                      <p className={`font-serif ${theme.textMuted}`}>
+                        <span className="font-medium">Submissions:</span> {formatDate(game.submissionStart)}
+                      </p>
+                      <p className={`font-serif ${theme.textMuted}`}>
+                        <span className="font-medium">Voting:</span> {formatDate(game.votingStart)}
+                      </p>
+                      <p className={`font-serif ${theme.textMuted}`}>
+                        <span className="font-medium">Reveal:</span> {formatDate(game.revealDate)}
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

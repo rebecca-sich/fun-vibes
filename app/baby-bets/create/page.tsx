@@ -22,6 +22,7 @@ export default function CreateGamePage() {
     createdBy: "",
     gender: "surprise" as BabyGender,
     password: "",
+    hideGuesses: false,
     submissionStart: formatDateForInput(now),
     votingStart: formatDateForInput(twoWeeks),
     revealDate: formatDateForInput(threeWeeks),
@@ -209,6 +210,23 @@ export default function CreateGamePage() {
                 />
                 <p className="mt-1 font-serif text-sm italic text-rose-500">
                   If set, players will need this password to join.
+                </p>
+              </div>
+
+              <div>
+                <label className="flex cursor-pointer items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={formData.hideGuesses}
+                    onChange={(e) => setFormData({ ...formData, hideGuesses: e.target.checked })}
+                    className="h-5 w-5 rounded border-2 border-rose-200 text-rose-500 focus:ring-rose-400/20"
+                  />
+                  <span className="font-serif text-base text-rose-800">
+                    Hide guesses during submission phase
+                  </span>
+                </label>
+                <p className="mt-1 ml-8 font-serif text-sm italic text-rose-500">
+                  When enabled, players cannot see what others have guessed until voting begins.
                 </p>
               </div>
 

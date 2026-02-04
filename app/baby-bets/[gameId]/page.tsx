@@ -362,9 +362,9 @@ export default function GamePage() {
           )}
 
           {phase === "submission" && (
-            <div className="flex flex-col gap-8 md:flex-row">
+            <div className={`flex flex-col gap-8 ${!game.hideGuesses ? 'md:flex-row' : ''}`}>
               {/* Submission Form - Double Border Frame */}
-              <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5 md:w-2/3`}>
+              <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5 ${!game.hideGuesses ? 'md:w-2/3' : 'mx-auto w-full max-w-2xl'}`}>
                 <div className={`flex h-full flex-col border ${theme.borderInner} p-6 sm:p-8`}>
                   <h2 className={`font-serif text-2xl ${theme.textPrimary}`}>
                     Submit Your Guess
@@ -472,49 +472,51 @@ export default function GamePage() {
                 </div>
               </div>
 
-              {/* Existing Submissions - Double Border Frame */}
-              <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5 md:w-1/3`}>
-                <div className={`flex h-full flex-col border ${theme.borderInner} p-6 sm:p-8`}>
-                  <h3 className={`font-serif text-xl ${theme.textPrimary}`}>
-                    Guesses So Far
-                    {submissions.length > 0 && (
-                      <span className={`ml-2 text-base ${theme.textMuted}`}>
-                        ({submissions.length})
-                      </span>
-                    )}
-                  </h3>
+              {/* Existing Submissions - Double Border Frame (only show if hideGuesses is false) */}
+              {!game.hideGuesses && (
+                <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5 md:w-1/3`}>
+                  <div className={`flex h-full flex-col border ${theme.borderInner} p-6 sm:p-8`}>
+                    <h3 className={`font-serif text-xl ${theme.textPrimary}`}>
+                      Guesses So Far
+                      {submissions.length > 0 && (
+                        <span className={`ml-2 text-base ${theme.textMuted}`}>
+                          ({submissions.length})
+                        </span>
+                      )}
+                    </h3>
 
-                  <div className={`my-4 border-t ${theme.borderInner}`} />
+                    <div className={`my-4 border-t ${theme.borderInner}`} />
 
-                  {submissions.length > 0 ? (
-                    <div className="space-y-4">
-                      {submissions.map((sub) => (
-                        <div
-                          key={sub.id}
-                          className={`border-l-2 ${theme.borderAccent} py-1 pl-4`}
-                        >
-                          <p className={`font-serif text-lg ${theme.textPrimary}`}>
-                            {sub.firstName}
-                            {sub.middleName && ` ${sub.middleName}`}
-                          </p>
-                          {sub.nickname && (
-                            <p className={`font-serif italic ${theme.textSecondary}`}>
-                              called &ldquo;{sub.nickname}&rdquo;
+                    {submissions.length > 0 ? (
+                      <div className="space-y-4">
+                        {submissions.map((sub) => (
+                          <div
+                            key={sub.id}
+                            className={`border-l-2 ${theme.borderAccent} py-1 pl-4`}
+                          >
+                            <p className={`font-serif text-lg ${theme.textPrimary}`}>
+                              {sub.firstName}
+                              {sub.middleName && ` ${sub.middleName}`}
                             </p>
-                          )}
-                          <p className={`mt-1 font-serif text-base ${theme.textMuted}`}>
-                            Guessed by {sub.playerName}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className={`font-serif italic ${theme.textMuted}`}>
-                      No guesses yet. Be the first!
-                    </p>
-                  )}
+                            {sub.nickname && (
+                              <p className={`font-serif italic ${theme.textSecondary}`}>
+                                called &ldquo;{sub.nickname}&rdquo;
+                              </p>
+                            )}
+                            <p className={`mt-1 font-serif text-base ${theme.textMuted}`}>
+                              Guessed by {sub.playerName}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className={`font-serif italic ${theme.textMuted}`}>
+                        No guesses yet. Be the first!
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 

@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
       submissionStart,
       votingStart,
       revealDate,
+      hideGuesses,
     } = body;
 
     // Validate required fields
@@ -41,6 +42,7 @@ export async function POST(request: NextRequest) {
       createdBy,
       gender,
       password: password || undefined,
+      hideGuesses: hideGuesses || false,
       submissionStart,
       votingStart,
       revealDate,
