@@ -203,7 +203,7 @@ export default function AdminPage() {
         {/* Back link */}
         <Link
           href={`/baby-bets/${gameId}`}
-          className={`inline-flex items-center font-serif text-sm ${theme.textMuted} transition-colors hover:${theme.textSecondary}`}
+          className={`inline-flex items-center font-serif text-base ${theme.textMuted} transition-colors hover:${theme.textSecondary}`}
         >
           <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -217,7 +217,7 @@ export default function AdminPage() {
             <h1 className={`font-display text-3xl font-bold tracking-tight ${theme.textPrimary} sm:text-4xl`}>
               {game.name}
             </h1>
-            <span className={`border ${theme.borderAccent} px-2 py-0.5 font-serif text-xs ${theme.badgeText}`}>
+            <span className={`border ${theme.borderAccent} px-2 py-1 font-serif text-base ${theme.badgeText}`}>
               Admin
             </span>
           </div>
@@ -238,7 +238,7 @@ export default function AdminPage() {
               <div className={`my-4 border-t ${theme.borderInner}`} />
 
               <div className={`border-2 ${theme.borderInner} bg-gray-50 p-3`}>
-                <p className="break-all font-mono text-sm text-gray-700">
+                <p className="break-all font-mono text-base text-gray-700">
                   {playerUrl}
                 </p>
               </div>
@@ -255,7 +255,7 @@ export default function AdminPage() {
               </button>
 
               {game.password && (
-                <p className={`mt-3 font-serif text-sm italic ${theme.textMuted}`}>
+                <p className={`mt-3 font-serif text-base italic ${theme.textMuted}`}>
                   Password: <span className="font-medium">{game.password}</span>
                 </p>
               )}
@@ -273,7 +273,7 @@ export default function AdminPage() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className={`font-serif ${theme.textMuted}`}>Current Phase</span>
-                  <span className={`border ${theme.borderAccent} px-2 py-0.5 font-serif text-sm ${theme.badgeText}`}>
+                  <span className={`border ${theme.borderAccent} px-2 py-1 font-serif text-base ${theme.badgeText}`}>
                     {phase === "pre-game" && "Starting Soon"}
                     {phase === "submission" && "Submissions Open"}
                     {phase === "voting" && "Voting Open"}
@@ -292,7 +292,7 @@ export default function AdminPage() {
               </div>
 
               <div className={`mt-4 border-t ${theme.borderInner} pt-4`}>
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2 text-base">
                   <p className={`font-serif ${theme.textMuted}`}>
                     <span className="font-medium">Submissions:</span> {formatDate(game.submissionStart)}
                   </p>
@@ -362,7 +362,7 @@ export default function AdminPage() {
                 </div>
 
                 {revealError && (
-                  <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3 font-serif text-sm text-red-700">
+                  <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3 font-serif text-base text-red-700">
                     {revealError}
                   </div>
                 )}
@@ -383,7 +383,7 @@ export default function AdminPage() {
         {game.isRevealed && game.actualName && (
           <div className={`mt-6 border-2 ${theme.borderOuter} bg-white/90 p-1.5`}>
             <div className={`border ${theme.borderInner} p-6 text-center`}>
-              <p className={`font-serif text-sm uppercase tracking-wider ${theme.textMuted}`}>
+              <p className={`font-serif text-base uppercase tracking-wider ${theme.textMuted}`}>
                 The baby&apos;s name is
               </p>
               <p className={`mt-2 font-serif text-3xl ${theme.textPrimary}`}>
@@ -428,7 +428,7 @@ export default function AdminPage() {
                     >
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className={`font-serif text-sm ${theme.textMuted}`}>
+                          <span className={`font-serif text-base ${theme.textMuted}`}>
                             #{index + 1}
                           </span>
                           <p className={`font-serif text-lg ${theme.textPrimary}`}>
@@ -436,7 +436,7 @@ export default function AdminPage() {
                             {sub.middleName && ` ${sub.middleName}`}
                           </p>
                           {isWinner && (
-                            <span className="border border-green-500 bg-green-100 px-2 py-0.5 font-serif text-xs text-green-700">
+                            <span className="border border-green-500 bg-green-100 px-2 py-0.5 font-serif text-sm text-green-700">
                               Winner!
                             </span>
                           )}
@@ -446,7 +446,7 @@ export default function AdminPage() {
                             called &ldquo;{sub.nickname}&rdquo;
                           </p>
                         )}
-                        <p className={`mt-1 font-serif text-sm ${theme.textMuted}`}>
+                        <p className={`mt-1 font-serif text-base ${theme.textMuted}`}>
                           Guessed by {sub.playerName}
                         </p>
                       </div>
@@ -454,7 +454,7 @@ export default function AdminPage() {
                         <p className={`font-serif text-lg font-medium ${theme.textPrimary}`}>
                           {voteCount}
                         </p>
-                        <p className={`font-serif text-xs ${theme.textMuted}`}>
+                        <p className={`font-serif text-base ${theme.textMuted}`}>
                           {voteCount === 1 ? "vote" : "votes"}
                         </p>
                       </div>
@@ -482,7 +482,7 @@ export default function AdminPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-serif text-red-800">Delete this game</p>
-                  <p className="font-serif text-sm italic text-red-600/70">
+                  <p className="font-serif text-base italic text-red-600/70">
                     This will permanently remove the game and all submissions.
                   </p>
                 </div>
@@ -499,7 +499,7 @@ export default function AdminPage() {
                   Are you sure you want to delete <strong>{game.name}</strong>? This action cannot be undone.
                 </p>
                 {deleteError && (
-                  <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3 font-serif text-sm text-red-700">
+                  <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3 font-serif text-base text-red-700">
                     {deleteError}
                   </div>
                 )}
@@ -529,7 +529,7 @@ export default function AdminPage() {
 
         {/* Footer */}
         <footer className="mt-12 pb-8 text-center">
-          <p className={`font-serif text-sm ${theme.textMuted}`}>
+          <p className={`font-serif text-base ${theme.textMuted}`}>
             Part of the{" "}
             <Link
               href="/"

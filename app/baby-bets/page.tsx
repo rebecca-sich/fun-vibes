@@ -39,7 +39,7 @@ export default async function BabyBetsHome() {
 
         {games.length > 0 && (
           <section className="mt-12">
-            <h2 className="font-serif text-sm uppercase tracking-wider text-rose-500">
+            <h2 className="font-serif text-base uppercase tracking-wider text-rose-500">
               Active Games
             </h2>
             <div className="mt-4 space-y-4">
@@ -57,7 +57,7 @@ export default async function BabyBetsHome() {
                       <h3 className="font-serif text-lg text-rose-900">
                         {game.name}
                       </h3>
-                      <span className={`border px-3 py-1 font-serif text-xs ${
+                      <span className={`border px-3 py-1 font-serif text-sm ${
                         phase === "submission" ? "border-green-400 text-green-700" :
                         phase === "voting" ? "border-blue-400 text-blue-700" :
                         phase === "revealed" ? "border-purple-400 text-purple-700" :
@@ -85,7 +85,7 @@ export default async function BabyBetsHome() {
       </div>
 
       <footer className="pb-8 text-center">
-        <p className="font-serif text-sm text-rose-400">
+        <p className="font-serif text-base text-rose-400">
           Part of the{" "}
           <Link
             href="/"

@@ -76,10 +76,10 @@ export default function CreateGamePage() {
               </div>
 
               <div className="mt-6 border-2 border-rose-300 bg-rose-50 p-4">
-                <p className="font-serif text-xs uppercase tracking-wider text-rose-500">
+                <p className="font-serif text-sm uppercase tracking-wider text-rose-500">
                   Your Admin Link (keep this secret!)
                 </p>
-                <p className="mt-1 break-all font-mono text-sm text-rose-900">
+                <p className="mt-1 break-all font-mono text-base text-rose-900">
                   {typeof window !== "undefined" ? window.location.origin : ""}{adminUrl}
                 </p>
               </div>
@@ -118,7 +118,7 @@ export default function CreateGamePage() {
       <div className="mx-auto max-w-xl px-6 py-8 sm:py-12">
         <Link
           href="/baby-bets"
-          className="inline-flex items-center font-serif text-sm text-rose-400 transition-colors hover:text-rose-500"
+          className="inline-flex items-center font-serif text-base text-rose-400 transition-colors hover:text-rose-500"
         >
           <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -160,7 +160,7 @@ export default function CreateGamePage() {
                   onChange={(e) => setFormData({ ...formData, createdBy: e.target.value })}
                   className="mt-1.5 w-full border-2 border-rose-200 bg-white px-4 py-2.5 font-serif text-rose-900 placeholder:text-rose-300 focus:border-rose-400 focus:outline-none focus:ring-rose-400/20"
                 />
-                <p className="mt-1 font-serif text-xs italic text-rose-500">
+                <p className="mt-1 font-serif text-sm italic text-rose-500">
                   This will be shown as &ldquo;Managed by [your name]&rdquo;
                 </p>
               </div>
@@ -207,7 +207,7 @@ export default function CreateGamePage() {
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   className="mt-1.5 w-full border-2 border-rose-200 bg-white px-4 py-2.5 font-serif text-rose-900 placeholder:text-rose-300 focus:border-rose-400 focus:outline-none focus:ring-rose-400/20"
                 />
-                <p className="mt-1 font-serif text-xs italic text-rose-500">
+                <p className="mt-1 font-serif text-sm italic text-rose-500">
                   If set, players will need this password to join.
                 </p>
               </div>
@@ -238,7 +238,7 @@ export default function CreateGamePage() {
                       onChange={(e) => setFormData({ ...formData, votingStart: e.target.value })}
                       className="mt-1.5 w-full border-2 border-rose-200 bg-white px-4 py-2.5 font-serif text-rose-900 focus:border-rose-400 focus:outline-none focus:ring-rose-400/20"
                     />
-                    <p className="mt-1 font-serif text-xs italic text-rose-500">
+                    <p className="mt-1 font-serif text-sm italic text-rose-500">
                       Submissions close when voting opens.
                     </p>
                   </div>
@@ -253,7 +253,7 @@ export default function CreateGamePage() {
                       onChange={(e) => setFormData({ ...formData, revealDate: e.target.value })}
                       className="mt-1.5 w-full border-2 border-rose-200 bg-white px-4 py-2.5 font-serif text-rose-900 focus:border-rose-400 focus:outline-none focus:ring-rose-400/20"
                     />
-                    <p className="mt-1 font-serif text-xs italic text-rose-500">
+                    <p className="mt-1 font-serif text-sm italic text-rose-500">
                       Voting closes at reveal. You can reveal early.
                     </p>
                   </div>
@@ -261,7 +261,7 @@ export default function CreateGamePage() {
               </div>
 
               {error && (
-                <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3 font-serif text-sm text-red-600">
+                <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3 font-serif text-base text-red-600">
                   {error}
                 </div>
               )}

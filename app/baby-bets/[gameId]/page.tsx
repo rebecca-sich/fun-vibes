@@ -301,7 +301,7 @@ export default function GamePage() {
                   className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} placeholder:${theme.textMuted} focus:outline-none ${theme.inputFocus}`}
                 />
                 {passwordError && (
-                  <p className="mt-2 border-l-4 border-red-400 bg-red-50 px-3 py-2 font-serif text-sm text-red-700">
+                  <p className="mt-2 border-l-4 border-red-400 bg-red-50 px-3 py-2 font-serif text-base text-red-700">
                     Incorrect password. Try again.
                   </p>
                 )}
@@ -455,7 +455,7 @@ export default function GamePage() {
                       </div>
 
                       {submitError && (
-                        <div className={`border-l-4 border-red-400 bg-red-50 px-4 py-3 text-sm text-red-700`}>
+                        <div className={`border-l-4 border-red-400 bg-red-50 px-4 py-3 text-base text-red-700`}>
                           {submitError}
                         </div>
                       )}
@@ -502,7 +502,7 @@ export default function GamePage() {
                               called &ldquo;{sub.nickname}&rdquo;
                             </p>
                           )}
-                          <p className={`mt-1 font-serif text-sm ${theme.textMuted}`}>
+                          <p className={`mt-1 font-serif text-base ${theme.textMuted}`}>
                             Guessed by {sub.playerName}
                           </p>
                         </div>
@@ -543,7 +543,7 @@ export default function GamePage() {
                       onChange={(e) => setVoterName(e.target.value)}
                       className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} placeholder:${theme.textMuted} focus:outline-none ${theme.inputFocus}`}
                     />
-                    <p className={`mt-2 font-serif text-sm italic ${theme.textMuted}`}>
+                    <p className={`mt-2 font-serif text-base italic ${theme.textMuted}`}>
                       You can vote for multiple names. One vote per name.
                     </p>
                   </div>
@@ -585,7 +585,7 @@ export default function GamePage() {
                                   called &ldquo;{sub.nickname}&rdquo;
                                 </p>
                               )}
-                              <p className={`mt-1 font-serif text-sm ${theme.textMuted}`}>
+                              <p className={`mt-1 font-serif text-base ${theme.textMuted}`}>
                                 guessed by {sub.playerName}
                               </p>
                             </div>
@@ -654,7 +654,7 @@ export default function GamePage() {
                 </h2>
                 {game.actualName && (
                   <div className={`mt-6 border-2 ${theme.borderAccent} p-6`}>
-                    <p className={`font-serif text-sm uppercase tracking-wider ${theme.textMuted}`}>
+                    <p className={`font-serif text-base uppercase tracking-wider ${theme.textMuted}`}>
                       The baby&apos;s name is
                     </p>
                     <p className={`mt-2 font-serif text-3xl ${theme.textPrimary}`}>
@@ -680,7 +680,7 @@ export default function GamePage() {
       </div>
 
       <footer className="pb-8 text-center">
-        <p className={`text-sm ${theme.textMuted}`}>
+        <p className={`text-base ${theme.textMuted}`}>
           Part of the{" "}
           <Link
             href="/"
