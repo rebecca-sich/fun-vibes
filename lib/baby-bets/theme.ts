@@ -21,6 +21,10 @@ export interface GameTheme {
   // Badge colors
   badgeBg: string;
   badgeText: string;
+  // Frame borders (for double-border cards)
+  borderOuter: string;
+  borderInner: string;
+  borderAccent: string;
 }
 
 const themes: Record<BabyGender, GameTheme> = {
@@ -39,6 +43,9 @@ const themes: Record<BabyGender, GameTheme> = {
     inputFocus: "focus:border-emerald-400 focus:ring-emerald-400/20",
     badgeBg: "bg-emerald-100",
     badgeText: "text-emerald-700",
+    borderOuter: "border-emerald-300",
+    borderInner: "border-emerald-200",
+    borderAccent: "border-emerald-400",
   },
   girl: {
     bgGradient: "from-amber-50 via-yellow-50 to-orange-50",
@@ -55,6 +62,9 @@ const themes: Record<BabyGender, GameTheme> = {
     inputFocus: "focus:border-amber-400 focus:ring-amber-400/20",
     badgeBg: "bg-amber-100",
     badgeText: "text-amber-700",
+    borderOuter: "border-amber-300",
+    borderInner: "border-amber-200",
+    borderAccent: "border-amber-400",
   },
   surprise: {
     bgGradient: "from-rose-50 via-pink-50 to-fuchsia-50",
@@ -71,6 +81,9 @@ const themes: Record<BabyGender, GameTheme> = {
     inputFocus: "focus:border-rose-400 focus:ring-rose-400/20",
     badgeBg: "bg-rose-100",
     badgeText: "text-rose-600",
+    borderOuter: "border-rose-300",
+    borderInner: "border-rose-200",
+    borderAccent: "border-rose-400",
   },
 };
 

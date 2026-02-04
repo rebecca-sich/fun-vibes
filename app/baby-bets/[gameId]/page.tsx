@@ -314,7 +314,7 @@ export default function GamePage() {
 
   return (
     <main className={`flex min-h-screen flex-col bg-gradient-to-b ${theme.bgGradient}`}>
-      <div className="mx-auto max-w-2xl flex-1 px-6 py-16 sm:py-24">
+      <div className="mx-auto w-full max-w-4xl flex-1 px-6 py-8 sm:py-12 lg:max-w-5xl xl:max-w-6xl">
         {/* Header */}
         <header className="text-center">
           <h1 className={`font-display text-4xl font-bold tracking-tight ${theme.textPrimary} sm:text-5xl`}>
@@ -348,134 +348,159 @@ export default function GamePage() {
           )}
 
           {phase === "submission" && (
-            <div className="space-y-6">
-              {/* Submission Form */}
-              <div className="rounded-3xl bg-white/70 p-8 shadow-sm ring-1 ring-black/5">
-                <h2 className={`text-xl font-semibold ${theme.textPrimary}`}>
-                  Submit Your Guess
-                </h2>
-                <p className={`mt-2 ${theme.textSecondary}`}>
-                  Voting opens {formatDate(game.votingStart)}
-                </p>
+            <div className="flex flex-col gap-8 md:flex-row">
+              {/* Submission Form - Double Border Frame */}
+              <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5 md:w-2/3`}>
+                <div className={`flex h-full flex-col border ${theme.borderInner} p-6 sm:p-8`}>
+                  <h2 className={`font-serif text-2xl ${theme.textPrimary}`}>
+                    Submit Your Guess
+                  </h2>
+                  <p className={`mt-2 font-serif text-base italic ${theme.textSecondary}`}>
+                    Voting opens {formatDate(game.votingStart)}
+                  </p>
 
-                {submitSuccess ? (
-                  <div className={`mt-6 rounded-xl ${theme.accentLight} p-6 text-center`}>
-                    <p className={`font-medium ${theme.textPrimary}`}>
-                      Your guess has been submitted!
-                    </p>
-                    <button
-                      onClick={() => setSubmitSuccess(false)}
-                      className={`mt-4 ${theme.textSecondary} hover:opacity-80 text-sm`}
-                    >
-                      Submit another guess
-                    </button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmission} className="mt-6 space-y-4">
-                    <div>
-                      <label className={`block text-sm font-medium ${theme.textPrimary}`}>
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Who are you?"
-                        value={submissionForm.playerName}
-                        onChange={(e) =>
-                          setSubmissionForm({ ...submissionForm, playerName: e.target.value })
-                        }
-                        className={`mt-1 w-full rounded-xl border ${theme.inputBorder} bg-white px-4 py-3 ${theme.textPrimary} placeholder:opacity-50 focus:outline-none focus:ring-2 ${theme.inputFocus}`}
-                      />
-                    </div>
+                  <div className={`my-6 border-t ${theme.borderInner}`} />
 
-                    <div>
-                      <label className={`block text-sm font-medium ${theme.textPrimary}`}>
-                        First Name Guess
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="What's the baby's first name?"
-                        value={submissionForm.firstName}
-                        onChange={(e) =>
-                          setSubmissionForm({ ...submissionForm, firstName: e.target.value })
-                        }
-                        className={`mt-1 w-full rounded-xl border ${theme.inputBorder} bg-white px-4 py-3 ${theme.textPrimary} placeholder:opacity-50 focus:outline-none focus:ring-2 ${theme.inputFocus}`}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={`block text-sm font-medium ${theme.textPrimary}`}>
-                        Middle Name (optional)
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Middle name guess"
-                        value={submissionForm.middleName}
-                        onChange={(e) =>
-                          setSubmissionForm({ ...submissionForm, middleName: e.target.value })
-                        }
-                        className={`mt-1 w-full rounded-xl border ${theme.inputBorder} bg-white px-4 py-3 ${theme.textPrimary} placeholder:opacity-50 focus:outline-none focus:ring-2 ${theme.inputFocus}`}
-                      />
-                    </div>
-
-                    <div>
-                      <label className={`block text-sm font-medium ${theme.textPrimary}`}>
-                        Nickname (optional)
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Any nickname?"
-                        value={submissionForm.nickname}
-                        onChange={(e) =>
-                          setSubmissionForm({ ...submissionForm, nickname: e.target.value })
-                        }
-                        className={`mt-1 w-full rounded-xl border ${theme.inputBorder} bg-white px-4 py-3 ${theme.textPrimary} placeholder:opacity-50 focus:outline-none focus:ring-2 ${theme.inputFocus}`}
-                      />
-                    </div>
-
-                    {submitError && (
-                      <div className="rounded-xl bg-red-50 p-4 text-sm text-red-600">
-                        {submitError}
+                  {submitSuccess ? (
+                    <div className="space-y-4">
+                      <div className={`flex items-center gap-3 border-l-4 ${theme.borderAccent} bg-white px-4 py-3 ${theme.textPrimary}`}>
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="font-serif">Your guess has been submitted!</span>
                       </div>
-                    )}
+                      <button
+                        onClick={() => setSubmitSuccess(false)}
+                        className={`w-full border-2 border-dashed ${theme.borderOuter} px-4 py-3 font-serif ${theme.textSecondary} transition-colors hover:bg-white`}
+                      >
+                        + Submit another guess
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSubmission} className="space-y-5">
+                      <div>
+                        <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                          Your Name
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Who are you?"
+                          value={submissionForm.playerName}
+                          onChange={(e) =>
+                            setSubmissionForm({ ...submissionForm, playerName: e.target.value })
+                          }
+                          className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} placeholder:${theme.textMuted} focus:outline-none ${theme.inputFocus}`}
+                        />
+                      </div>
 
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className={`w-full rounded-xl ${theme.accent} px-4 py-3 font-medium text-white transition-colors ${theme.accentHover} disabled:opacity-50`}
-                    >
-                      {submitting ? "Submitting..." : "Submit Guess"}
-                    </button>
-                  </form>
-                )}
+                      <div>
+                        <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                          First Name Guess
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="What's the baby's first name?"
+                          value={submissionForm.firstName}
+                          onChange={(e) =>
+                            setSubmissionForm({ ...submissionForm, firstName: e.target.value })
+                          }
+                          className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} placeholder:${theme.textMuted} focus:outline-none ${theme.inputFocus}`}
+                        />
+                      </div>
+
+                      <div>
+                        <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                          Middle Name <span className="italic">(optional)</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Have a middle name guess?"
+                          value={submissionForm.middleName}
+                          onChange={(e) =>
+                            setSubmissionForm({ ...submissionForm, middleName: e.target.value })
+                          }
+                          className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} placeholder:${theme.textMuted} focus:outline-none ${theme.inputFocus}`}
+                        />
+                      </div>
+
+                      <div>
+                        <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                          Nickname <span className="italic">(optional)</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Any nickname?"
+                          value={submissionForm.nickname}
+                          onChange={(e) =>
+                            setSubmissionForm({ ...submissionForm, nickname: e.target.value })
+                          }
+                          className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} placeholder:${theme.textMuted} focus:outline-none ${theme.inputFocus}`}
+                        />
+                      </div>
+
+                      {submitError && (
+                        <div className={`border-l-4 border-red-400 bg-red-50 px-4 py-3 text-sm text-red-700`}>
+                          {submitError}
+                        </div>
+                      )}
+
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className={`w-full border-2 ${theme.borderAccent} ${theme.accent} px-4 py-3 font-serif font-medium text-white transition-colors ${theme.accentHover} disabled:opacity-50`}
+                      >
+                        {submitting ? "Submitting..." : "Submit Guess"}
+                      </button>
+                    </form>
+                  )}
+                </div>
               </div>
 
-              {/* Existing Submissions */}
-              {submissions.length > 0 && (
-                <div className="rounded-3xl bg-white/70 p-8 shadow-sm ring-1 ring-black/5">
-                  <h3 className={`text-lg font-semibold ${theme.textPrimary}`}>
-                    Guesses So Far ({submissions.length})
+              {/* Existing Submissions - Double Border Frame */}
+              <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5 md:w-1/3`}>
+                <div className={`flex h-full flex-col border ${theme.borderInner} p-6 sm:p-8`}>
+                  <h3 className={`font-serif text-xl ${theme.textPrimary}`}>
+                    Guesses So Far
+                    {submissions.length > 0 && (
+                      <span className={`ml-2 text-base ${theme.textMuted}`}>
+                        ({submissions.length})
+                      </span>
+                    )}
                   </h3>
-                  <div className="mt-4 space-y-3">
-                    {submissions.map((sub) => (
-                      <div
-                        key={sub.id}
-                        className={`rounded-xl ${theme.accentLight} p-4`}
-                      >
-                        <p className={`font-medium ${theme.textPrimary}`}>
-                          {sub.firstName}
-                          {sub.middleName && ` ${sub.middleName}`}
-                          {sub.nickname && ` "${sub.nickname}"`}
-                        </p>
-                        <p className={`text-sm ${theme.textMuted}`}>
-                          Guessed by {sub.playerName}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+
+                  <div className={`my-4 border-t ${theme.borderInner}`} />
+
+                  {submissions.length > 0 ? (
+                    <div className="space-y-4">
+                      {submissions.map((sub) => (
+                        <div
+                          key={sub.id}
+                          className={`border-l-2 ${theme.borderAccent} py-1 pl-4`}
+                        >
+                          <p className={`font-serif text-lg ${theme.textPrimary}`}>
+                            {sub.firstName}
+                            {sub.middleName && ` ${sub.middleName}`}
+                          </p>
+                          {sub.nickname && (
+                            <p className={`font-serif italic ${theme.textSecondary}`}>
+                              called &ldquo;{sub.nickname}&rdquo;
+                            </p>
+                          )}
+                          <p className={`mt-1 font-serif text-sm ${theme.textMuted}`}>
+                            Guessed by {sub.playerName}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className={`font-serif italic ${theme.textMuted}`}>
+                      No guesses yet. Be the first!
+                    </p>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           )}
 
@@ -527,8 +552,12 @@ export default function GamePage() {
                             <p className={`font-medium ${theme.textPrimary}`}>
                               {sub.firstName}
                               {sub.middleName && ` ${sub.middleName}`}
-                              {sub.nickname && ` "${sub.nickname}"`}
                             </p>
+                            {sub.nickname && (
+                              <p className={`text-sm italic ${theme.textSecondary}`}>
+                                Called &ldquo;{sub.nickname}&rdquo;
+                              </p>
+                            )}
                             <p className={`text-sm ${theme.textMuted}`}>
                               Guessed by {sub.playerName}
                             </p>
