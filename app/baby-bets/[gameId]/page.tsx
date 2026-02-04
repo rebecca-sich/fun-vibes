@@ -277,35 +277,42 @@ export default function GamePage() {
   if (game.hasPassword && !isAuthenticated) {
     return (
       <main className={`min-h-screen bg-gradient-to-b ${theme.bgGradient}`}>
-        <div className="mx-auto max-w-md px-6 py-16 sm:py-24">
-          <div className="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-black/5">
-            <h1 className={`text-2xl font-bold ${theme.textPrimary}`}>
-              {game.name}
-            </h1>
-            <p className={`mt-2 ${theme.textSecondary}`}>
-              This game is password protected.
-            </p>
+        <div className="mx-auto max-w-md px-6 py-12 sm:py-16">
+          <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5`}>
+            <div className={`border ${theme.borderInner} p-8`}>
+              <h1 className={`font-display text-2xl font-bold tracking-tight ${theme.textPrimary}`}>
+                {game.name}
+              </h1>
+              <p className={`mt-2 font-serif italic ${theme.textSecondary}`}>
+                This game is password protected.
+              </p>
 
-            <form onSubmit={handlePasswordSubmit} className="mt-6">
-              <input
-                type="password"
-                placeholder="Enter password"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                className={`w-full rounded-xl border ${theme.inputBorder} bg-white px-4 py-3 ${theme.textPrimary} placeholder:opacity-50 focus:outline-none focus:ring-2 ${theme.inputFocus}`}
-              />
-              {passwordError && (
-                <p className="mt-2 text-sm text-red-500">
-                  Incorrect password. Try again.
-                </p>
-              )}
-              <button
-                type="submit"
-                className={`mt-4 w-full rounded-xl ${theme.accent} px-4 py-3 font-medium text-white transition-colors ${theme.accentHover}`}
-              >
-                Join Game
-              </button>
-            </form>
+              <div className={`my-6 border-t ${theme.borderInner}`} />
+
+              <form onSubmit={handlePasswordSubmit}>
+                <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                  Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter password"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} placeholder:${theme.textMuted} focus:outline-none ${theme.inputFocus}`}
+                />
+                {passwordError && (
+                  <p className="mt-2 border-l-4 border-red-400 bg-red-50 px-3 py-2 font-serif text-sm text-red-700">
+                    Incorrect password. Try again.
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  className={`mt-6 w-full border-2 ${theme.borderAccent} ${theme.accent} px-4 py-3 font-serif font-medium text-white transition-colors ${theme.accentHover}`}
+                >
+                  Join Game
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </main>
@@ -322,7 +329,7 @@ export default function GamePage() {
           </h1>
           <div className="mt-4 flex items-center justify-center gap-2">
             <span
-              className={`rounded-full px-3 py-1 text-sm font-medium ${theme.badgeBg} ${theme.badgeText}`}
+              className={`border ${theme.borderAccent} px-3 py-1 font-serif text-sm ${theme.badgeText}`}
             >
               {phaseLabel}
             </span>
@@ -332,17 +339,19 @@ export default function GamePage() {
         {/* Phase-specific content */}
         <div className="mt-12">
           {phase === "pre-game" && (
-            <div className="rounded-3xl bg-white/70 p-8 text-center shadow-sm ring-1 ring-black/5">
-              <h2 className={`text-xl font-semibold ${theme.textPrimary}`}>
-                Game Starting Soon
-              </h2>
-              <p className={`mt-2 ${theme.textSecondary}`}>
-                Submissions open on {formatDate(game.submissionStart)}
-              </p>
-              <div className={`mt-6 rounded-xl ${theme.accentLight} p-4`}>
-                <p className={`text-sm ${theme.textMuted}`}>
-                  Come back then to submit your baby name guesses!
+            <div className={`mx-auto max-w-xl border-2 ${theme.borderOuter} bg-white/90 p-1.5`}>
+              <div className={`border ${theme.borderInner} p-8 text-center`}>
+                <h2 className={`font-serif text-2xl ${theme.textPrimary}`}>
+                  Game Starting Soon
+                </h2>
+                <p className={`mt-2 font-serif text-base italic ${theme.textSecondary}`}>
+                  Submissions open on {formatDate(game.submissionStart)}
                 </p>
+                <div className={`mt-6 border-t ${theme.borderInner} pt-6`}>
+                  <p className={`font-serif italic ${theme.textMuted}`}>
+                    Come back then to submit your baby name guesses!
+                  </p>
+                </div>
               </div>
             </div>
           )}
@@ -505,143 +514,160 @@ export default function GamePage() {
           )}
 
           {phase === "voting" && (
-            <div className="space-y-6">
-              {/* Voter Name */}
-              <div className="rounded-3xl bg-white/70 p-8 shadow-sm ring-1 ring-black/5">
-                <h2 className={`text-xl font-semibold ${theme.textPrimary}`}>
-                  Vote for Your Favorites
-                </h2>
-                <p className={`mt-2 ${theme.textSecondary}`}>
-                  Voting closes {formatDate(game.revealDate)}
-                </p>
-
-                <div className="mt-6">
-                  <label className={`block text-sm font-medium ${theme.textPrimary}`}>
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter your name to vote"
-                    value={voterName}
-                    onChange={(e) => setVoterName(e.target.value)}
-                    className={`mt-1 w-full rounded-xl border ${theme.inputBorder} bg-white px-4 py-3 ${theme.textPrimary} placeholder:opacity-50 focus:outline-none focus:ring-2 ${theme.inputFocus}`}
-                  />
-                  <p className={`mt-1 text-xs ${theme.textMuted}`}>
-                    You can vote for multiple names. One vote per name.
+            <div className="flex flex-col gap-8 md:flex-row">
+              {/* Voter Name Card */}
+              <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5 md:w-1/3`}>
+                <div className={`flex h-full flex-col border ${theme.borderInner} p-6 sm:p-8`}>
+                  <h2 className={`font-serif text-2xl ${theme.textPrimary}`}>
+                    Vote for Your Favorites
+                  </h2>
+                  <p className={`mt-2 font-serif text-base italic ${theme.textSecondary}`}>
+                    Voting closes {formatDate(game.revealDate)}
                   </p>
+
+                  <div className={`my-6 border-t ${theme.borderInner}`} />
+
+                  <div>
+                    <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                      Your Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter your name to vote"
+                      value={voterName}
+                      onChange={(e) => setVoterName(e.target.value)}
+                      className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} placeholder:${theme.textMuted} focus:outline-none ${theme.inputFocus}`}
+                    />
+                    <p className={`mt-2 font-serif text-sm italic ${theme.textMuted}`}>
+                      You can vote for multiple names. One vote per name.
+                    </p>
+                  </div>
                 </div>
               </div>
 
               {/* Submissions to vote on */}
-              {submissions.length > 0 ? (
-                <div className="rounded-3xl bg-white/70 p-8 shadow-sm ring-1 ring-black/5">
-                  <h3 className={`text-lg font-semibold ${theme.textPrimary}`}>
-                    Name Guesses ({submissions.length})
+              <div className={`border-2 ${theme.borderOuter} bg-white/90 p-1.5 md:w-2/3`}>
+                <div className={`flex h-full flex-col border ${theme.borderInner} p-6 sm:p-8`}>
+                  <h3 className={`font-serif text-xl ${theme.textPrimary}`}>
+                    Name Guesses
+                    {submissions.length > 0 && (
+                      <span className={`ml-2 text-base ${theme.textMuted}`}>
+                        ({submissions.length})
+                      </span>
+                    )}
                   </h3>
-                  <div className="mt-4 space-y-3">
-                    {submissions.map((sub) => {
-                      const hasVoted = myVotes.has(sub.id);
-                      const voteCount = voteCounts[sub.id] || 0;
 
-                      return (
-                        <div
-                          key={sub.id}
-                          className={`flex items-center justify-between rounded-xl ${theme.accentLight} p-4`}
-                        >
-                          <div>
-                            <p className={`font-medium ${theme.textPrimary}`}>
-                              {sub.firstName}
-                              {sub.middleName && ` ${sub.middleName}`}
-                            </p>
-                            {sub.nickname && (
-                              <p className={`text-sm italic ${theme.textSecondary}`}>
-                                Called &ldquo;{sub.nickname}&rdquo;
-                              </p>
-                            )}
-                            <p className={`text-sm ${theme.textMuted}`}>
-                              Guessed by {sub.playerName}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => handleVote(sub.id)}
-                            disabled={hasVoted || voting || !voterName.trim()}
-                            className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                              hasVoted
-                                ? `${theme.accent} text-white`
-                                : `bg-white ${theme.textPrimary} hover:opacity-80 disabled:opacity-50`
-                            }`}
+                  <div className={`my-4 border-t ${theme.borderInner}`} />
+
+                  {submissions.length > 0 ? (
+                    <div className="space-y-4">
+                      {submissions.map((sub) => {
+                        const hasVoted = myVotes.has(sub.id);
+                        const voteCount = voteCounts[sub.id] || 0;
+
+                        return (
+                          <div
+                            key={sub.id}
+                            className={`flex items-center justify-between border-l-2 ${theme.borderAccent} py-2 pl-4`}
                           >
-                            <svg
-                              className="h-4 w-4"
-                              fill={hasVoted ? "currentColor" : "none"}
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
+                            <div>
+                              <p className={`font-serif text-lg ${theme.textPrimary}`}>
+                                {sub.firstName}
+                                {sub.middleName && ` ${sub.middleName}`}
+                              </p>
+                              {sub.nickname && (
+                                <p className={`font-serif italic ${theme.textSecondary}`}>
+                                  called &ldquo;{sub.nickname}&rdquo;
+                                </p>
+                              )}
+                              <p className={`mt-1 font-serif text-sm ${theme.textMuted}`}>
+                                guessed by {sub.playerName}
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => handleVote(sub.id)}
+                              disabled={hasVoted || voting || !voterName.trim()}
+                              className={`flex items-center gap-2 border-2 px-4 py-2 font-serif text-sm transition-colors ${
+                                hasVoted
+                                  ? `${theme.borderAccent} ${theme.accent} text-white`
+                                  : `${theme.borderOuter} bg-white ${theme.textPrimary} hover:bg-gray-50 disabled:opacity-50`
+                              }`}
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                              />
-                            </svg>
-                            {hasVoted ? "Voted" : "Vote"}
-                            {voteCount > 0 && ` (${voteCount})`}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
+                              <svg
+                                className="h-4 w-4"
+                                fill={hasVoted ? "currentColor" : "none"}
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                />
+                              </svg>
+                              {hasVoted ? "Voted" : "Vote"}
+                              {voteCount > 0 && ` (${voteCount})`}
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className={`font-serif italic ${theme.textMuted}`}>
+                      No submissions to vote on yet.
+                    </p>
+                  )}
                 </div>
-              ) : (
-                <div className={`rounded-3xl bg-white/70 p-8 text-center shadow-sm ring-1 ring-black/5`}>
-                  <p className={theme.textMuted}>No submissions to vote on yet.</p>
-                </div>
-              )}
+              </div>
             </div>
           )}
 
           {phase === "awaiting-reveal" && (
-            <div className="rounded-3xl bg-white/70 p-8 text-center shadow-sm ring-1 ring-black/5">
-              <h2 className={`text-xl font-semibold ${theme.textPrimary}`}>
-                Waiting for the Big Reveal
-              </h2>
-              <p className={`mt-2 ${theme.textSecondary}`}>
-                The Game Master will reveal the actual baby name soon!
-              </p>
-              <div className={`mt-6 rounded-xl ${theme.accentLight} p-4`}>
-                <p className={`text-sm ${theme.textMuted}`}>
-                  Check back later for the results...
+            <div className={`mx-auto max-w-xl border-2 ${theme.borderOuter} bg-white/90 p-1.5`}>
+              <div className={`border ${theme.borderInner} p-8 text-center`}>
+                <h2 className={`font-serif text-2xl ${theme.textPrimary}`}>
+                  Waiting for the Big Reveal
+                </h2>
+                <p className={`mt-2 font-serif text-base italic ${theme.textSecondary}`}>
+                  The Game Master will reveal the actual baby name soon!
                 </p>
+                <div className={`mt-6 border-t ${theme.borderInner} pt-6`}>
+                  <p className={`font-serif italic ${theme.textMuted}`}>
+                    Check back later for the results...
+                  </p>
+                </div>
               </div>
             </div>
           )}
 
           {phase === "revealed" && (
-            <div className="rounded-3xl bg-white/70 p-8 shadow-sm ring-1 ring-black/5">
-              <h2 className={`text-xl font-semibold ${theme.textPrimary}`}>
-                The Results Are In!
-              </h2>
-              {game.actualName && (
-                <div className={`mt-6 rounded-xl ${theme.accentLight} p-6 text-center`}>
-                  <p className={`text-sm uppercase tracking-wider ${theme.textMuted}`}>
-                    The baby&apos;s name is
-                  </p>
-                  <p className={`mt-2 text-3xl font-bold ${theme.textPrimary}`}>
-                    {game.actualName.first}
-                    {game.actualName.middle && ` ${game.actualName.middle}`}
-                  </p>
-                  {game.actualName.nickname && (
-                    <p className={`mt-1 ${theme.textSecondary}`}>
-                      &quot;{game.actualName.nickname}&quot;
+            <div className={`mx-auto max-w-xl border-2 ${theme.borderOuter} bg-white/90 p-1.5`}>
+              <div className={`border ${theme.borderInner} p-8 text-center`}>
+                <h2 className={`font-serif text-2xl ${theme.textPrimary}`}>
+                  The Results Are In!
+                </h2>
+                {game.actualName && (
+                  <div className={`mt-6 border-2 ${theme.borderAccent} p-6`}>
+                    <p className={`font-serif text-sm uppercase tracking-wider ${theme.textMuted}`}>
+                      The baby&apos;s name is
                     </p>
-                  )}
+                    <p className={`mt-2 font-serif text-3xl ${theme.textPrimary}`}>
+                      {game.actualName.first}
+                      {game.actualName.middle && ` ${game.actualName.middle}`}
+                    </p>
+                    {game.actualName.nickname && (
+                      <p className={`mt-1 font-serif italic ${theme.textSecondary}`}>
+                        called &ldquo;{game.actualName.nickname}&rdquo;
+                      </p>
+                    )}
+                  </div>
+                )}
+                <div className={`mt-6 border-t ${theme.borderInner} pt-6`}>
+                  <p className={`font-serif italic ${theme.textMuted}`}>
+                    Leaderboard coming soon...
+                  </p>
                 </div>
-              )}
-              {/* Leaderboard will go here */}
-              <div className={`mt-6 text-center`}>
-                <p className={`text-sm ${theme.textMuted}`}>
-                  Leaderboard coming soon...
-                </p>
               </div>
             </div>
           )}
