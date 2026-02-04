@@ -200,7 +200,7 @@ export default function GamePage() {
         const newVotes = new Set(myVotes);
         newVotes.add(submissionId);
         setMyVotes(newVotes);
-        sessionStorage.setItem(`my-votes-${gameId}`, JSON.stringify([...newVotes]));
+        sessionStorage.setItem(`my-votes-${gameId}`, JSON.stringify(Array.from(newVotes)));
         sessionStorage.setItem(`voter-name-${gameId}`, voterName.trim());
 
         // Update vote count
