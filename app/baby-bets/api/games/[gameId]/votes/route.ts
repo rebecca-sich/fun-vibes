@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { nanoid } from "nanoid";
-import { getGame, getVotes, addVote, hasVoted } from "@/lib/baby-bets/db";
+import { getGame, getVotes, addVote, hasVoted, getVoterTotalVotes } from "@/lib/baby-bets/db";
 import { Vote } from "@/lib/baby-bets/types";
 
 export async function GET(
@@ -85,6 +85,18 @@ export async function POST(
         { error: "You've already voted for this submission" },
         { status: 400 }
       );
+    }
+
+    // Check total vote limit
+    const maxVotes = game.maxVotes ?? 2;
+    if (maxVotes > 0) {
+      const totalVotes = await getVoterTotalVotes(gameId, voterName);
+      if (totalVotes >= maxVotes) {
+        return NextResponse.json(
+          { error: `You've used all ${maxVotes} of your votes` },
+          { status: 400 }
+        );
+      }
     }
 
     const vote: Vote = {

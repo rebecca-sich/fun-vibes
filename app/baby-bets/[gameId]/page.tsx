@@ -186,6 +186,12 @@ export default function GamePage() {
       return; // Already voted
     }
 
+    // Check vote limit
+    if (!isUnlimitedVotes && myVotes.size >= maxVotes) {
+      alert(`You've used all ${maxVotes} of your votes!`);
+      return;
+    }
+
     setVoting(true);
 
     try {
@@ -272,6 +278,12 @@ export default function GamePage() {
   const theme = getTheme(game.gender);
   const phase = getPhase(game);
   const phaseLabel = getPhaseLabel(phase);
+
+  // Vote limit
+  const maxVotes = game.maxVotes ?? 2;
+  const isUnlimitedVotes = maxVotes === 0;
+  const votesRemaining = isUnlimitedVotes ? Infinity : maxVotes - myVotes.size;
+  const hasReachedVoteLimit = !isUnlimitedVotes && votesRemaining <= 0;
 
   // Password gate
   if (game.hasPassword && !isAuthenticated) {
@@ -546,8 +558,19 @@ export default function GamePage() {
                       className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} placeholder:${theme.textMuted} focus:outline-none ${theme.inputFocus}`}
                     />
                     <p className={`mt-2 font-serif text-base italic ${theme.textMuted}`}>
-                      You can vote for multiple names. One vote per name.
+                      {isUnlimitedVotes
+                        ? "You can vote for as many names as you like. One vote per name."
+                        : hasReachedVoteLimit
+                        ? `You've used all ${maxVotes} of your votes!`
+                        : `You have ${votesRemaining} vote${votesRemaining !== 1 ? "s" : ""} remaining. One vote per name.`}
                     </p>
+                    {!isUnlimitedVotes && myVotes.size > 0 && (
+                      <div className={`mt-3 inline-flex items-center gap-1 border ${theme.borderAccent} px-2 py-1 font-serif text-sm ${theme.badgeText}`}>
+                        {votesRemaining > 0
+                          ? `${myVotes.size}/${maxVotes} votes used`
+                          : "All votes used"}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -593,7 +616,7 @@ export default function GamePage() {
                             </div>
                             <button
                               onClick={() => handleVote(sub.id)}
-                              disabled={hasVoted || voting || !voterName.trim()}
+                              disabled={hasVoted || voting || !voterName.trim() || hasReachedVoteLimit}
                               className={`flex items-center gap-2 border-2 px-4 py-2 font-serif text-sm transition-colors ${
                                 hasVoted
                                   ? `${theme.borderAccent} ${theme.accent} text-white`

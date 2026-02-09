@@ -18,6 +18,7 @@ export interface Game {
 
   // Game configuration
   hideGuesses?: boolean; // Hide guesses list during submission phase
+  maxVotes?: number; // Max votes per player (0 = unlimited, default: 2)
 
   // Reveal data (set by GM)
   actualName?: {

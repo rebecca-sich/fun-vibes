@@ -66,6 +66,7 @@ export default function AdminPage() {
     votingStart: "",
     revealDate: "",
     hideGuesses: false,
+    maxVotes: 2,
   });
   const [savingSettings, setSavingSettings] = useState(false);
   const [settingsError, setSettingsError] = useState<string | null>(null);
@@ -93,6 +94,7 @@ export default function AdminPage() {
           votingStart: formatDateForInput(data.game.votingStart),
           revealDate: formatDateForInput(data.game.revealDate),
           hideGuesses: data.game.hideGuesses || false,
+          maxVotes: data.game.maxVotes ?? 2,
         });
       } catch {
         setError("Failed to load game");
@@ -190,6 +192,7 @@ export default function AdminPage() {
           votingStart: new Date(settingsForm.votingStart).toISOString(),
           revealDate: new Date(settingsForm.revealDate).toISOString(),
           hideGuesses: settingsForm.hideGuesses,
+          maxVotes: settingsForm.maxVotes,
         }),
       });
 
@@ -410,6 +413,22 @@ export default function AdminPage() {
                     </p>
                   </div>
 
+                  <div className={`border-t ${theme.borderInner} pt-4`}>
+                    <label className={`block font-serif text-base ${theme.textPrimary}`}>
+                      Max Votes Per Player
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={settingsForm.maxVotes}
+                      onChange={(e) => setSettingsForm({ ...settingsForm, maxVotes: parseInt(e.target.value) || 0 })}
+                      className={`mt-1.5 w-full border-2 ${theme.inputBorder} bg-white px-4 py-2.5 font-serif ${theme.textPrimary} focus:outline-none ${theme.inputFocus}`}
+                    />
+                    <p className={`mt-1 font-serif text-sm italic ${theme.textMuted}`}>
+                      How many names each player can vote for. Set to 0 for unlimited.
+                    </p>
+                  </div>
+
                   {settingsError && (
                     <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3 font-serif text-base text-red-700">
                       {settingsError}
@@ -435,6 +454,7 @@ export default function AdminPage() {
                             votingStart: formatDateForInput(game.votingStart),
                             revealDate: formatDateForInput(game.revealDate),
                             hideGuesses: game.hideGuesses || false,
+                            maxVotes: game.maxVotes ?? 2,
                           });
                         }
                       }}
@@ -470,6 +490,12 @@ export default function AdminPage() {
                       <span className={`font-serif ${theme.textMuted}`}>Hide Guesses</span>
                       <span className={`font-serif font-medium ${theme.textPrimary}`}>
                         {game.hideGuesses ? "Yes" : "No"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className={`font-serif ${theme.textMuted}`}>Max Votes</span>
+                      <span className={`font-serif font-medium ${theme.textPrimary}`}>
+                        {(game.maxVotes ?? 2) === 0 ? "Unlimited" : game.maxVotes ?? 2}
                       </span>
                     </div>
                   </div>

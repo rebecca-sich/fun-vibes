@@ -118,3 +118,13 @@ export async function getVoteCount(
   const votes = await getVotes(gameId);
   return votes.filter((v) => v.submissionId === submissionId).length;
 }
+
+export async function getVoterTotalVotes(
+  gameId: string,
+  voterName: string
+): Promise<number> {
+  const votes = await getVotes(gameId);
+  return votes.filter(
+    (v) => v.voterName.toLowerCase() === voterName.toLowerCase()
+  ).length;
+}

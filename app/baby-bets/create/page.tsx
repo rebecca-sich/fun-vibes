@@ -23,6 +23,7 @@ export default function CreateGamePage() {
     gender: "surprise" as BabyGender,
     password: "",
     hideGuesses: false,
+    maxVotes: 2,
     submissionStart: formatDateForInput(now),
     votingStart: formatDateForInput(twoWeeks),
     revealDate: formatDateForInput(threeWeeks),
@@ -227,6 +228,22 @@ export default function CreateGamePage() {
                 </label>
                 <p className="mt-1 ml-8 font-serif text-sm italic text-rose-500">
                   When enabled, players cannot see what others have guessed until voting begins.
+                </p>
+              </div>
+
+              <div>
+                <label className="block font-serif text-base text-rose-800">
+                  Max Votes Per Player
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={formData.maxVotes}
+                  onChange={(e) => setFormData({ ...formData, maxVotes: parseInt(e.target.value) || 0 })}
+                  className="mt-1.5 w-full border-2 border-rose-200 bg-white px-4 py-2.5 font-serif text-rose-900 placeholder:text-rose-300 focus:border-rose-400 focus:outline-none focus:ring-rose-400/20"
+                />
+                <p className="mt-1 font-serif text-sm italic text-rose-500">
+                  How many names each player can vote for. Set to 0 for unlimited.
                 </p>
               </div>
 

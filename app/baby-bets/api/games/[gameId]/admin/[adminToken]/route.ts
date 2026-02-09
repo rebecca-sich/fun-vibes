@@ -100,14 +100,15 @@ export async function POST(
     }
 
     if (action === "updateSettings") {
-      const { submissionStart, votingStart, revealDate, hideGuesses } = body;
+      const { submissionStart, votingStart, revealDate, hideGuesses, maxVotes } = body;
 
       // Validate that at least one setting is being updated
       if (
         submissionStart === undefined &&
         votingStart === undefined &&
         revealDate === undefined &&
-        hideGuesses === undefined
+        hideGuesses === undefined &&
+        maxVotes === undefined
       ) {
         return NextResponse.json(
           { error: "No settings provided to update" },
@@ -129,6 +130,9 @@ export async function POST(
       }
       if (hideGuesses !== undefined) {
         updatedGame.hideGuesses = hideGuesses;
+      }
+      if (maxVotes !== undefined) {
+        updatedGame.maxVotes = typeof maxVotes === "number" && maxVotes >= 0 ? maxVotes : 2;
       }
 
       // Validate date ordering
