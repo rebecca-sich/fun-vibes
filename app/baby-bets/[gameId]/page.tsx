@@ -76,6 +76,7 @@ export default function GamePage() {
   const [voterName, setVoterName] = useState("");
   const [myVotes, setMyVotes] = useState<Set<string>>(new Set());
   const [voting, setVoting] = useState(false);
+  const [voters, setVoters] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchGame() {
@@ -126,6 +127,7 @@ export default function GamePage() {
         if (votesRes.ok) {
           const votesData = await votesRes.json();
           setVoteCounts(votesData.voteCounts || {});
+          setVoters(votesData.voters || []);
         }
 
         // Load saved voter name from session storage
@@ -214,6 +216,14 @@ export default function GamePage() {
           ...prev,
           [submissionId]: (prev[submissionId] || 0) + 1,
         }));
+
+        // Add to voters list if not already there
+        const trimmedName = voterName.trim();
+        setVoters((prev) =>
+          prev.some((v) => v.toLowerCase() === trimmedName.toLowerCase())
+            ? prev
+            : [...prev, trimmedName]
+        );
       } else {
         const data = await res.json();
         alert(data.error || "Failed to vote");
@@ -572,6 +582,32 @@ export default function GamePage() {
                       </div>
                     )}
                   </div>
+
+                  {voters.length > 0 && (
+                    <>
+                      <div className={`my-6 border-t ${theme.borderInner}`} />
+                      <div>
+                        <h3 className={`font-serif text-base ${theme.textPrimary}`}>
+                          Already Voted
+                          <span className={`ml-2 text-sm ${theme.textMuted}`}>
+                            ({voters.length})
+                          </span>
+                        </h3>
+                        <div className={`mt-2 border ${theme.borderInner} p-3`}>
+                          <div className="flex flex-wrap gap-2">
+                            {voters.map((name) => (
+                              <span
+                                key={name}
+                                className={`font-serif text-sm ${theme.textSecondary}`}
+                              >
+                                {name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 

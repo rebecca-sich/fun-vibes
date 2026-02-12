@@ -25,7 +25,8 @@ export async function GET(
       votes.forEach((vote) => {
         voteCounts[vote.submissionId] = (voteCounts[vote.submissionId] || 0) + 1;
       });
-      return NextResponse.json({ voteCounts });
+      const voters = Array.from(new Set(votes.map((v) => v.voterName)));
+      return NextResponse.json({ voteCounts, voters });
     }
 
     return NextResponse.json({ votes });
