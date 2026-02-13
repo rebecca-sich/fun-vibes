@@ -2,6 +2,7 @@ import { getSupabase } from "./supabase";
 import type {
   User,
   Task,
+  RecurrenceFrequency,
   TaskException,
   TaskCompletion,
 } from "./types";
@@ -336,33 +337,33 @@ export async function getCompletionsForRange(
 
 // ── Helpers ───────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function dbRowToTask(row: any): Task {
+function dbRowToTask(row: Record<string, unknown>): Task {
+  const time = row.time as string | null;
   return {
-    id: row.id,
-    user_slug: row.user_slug,
-    title: row.title,
-    notes: row.notes || undefined,
-    date: row.date,
-    time: row.time ? row.time.slice(0, 5) : undefined, // "HH:MM:SS" → "HH:MM"
-    completed: row.completed ?? false,
-    completed_at: row.completed_at || undefined,
+    id: row.id as string,
+    user_slug: row.user_slug as string,
+    title: row.title as string,
+    notes: (row.notes as string) || undefined,
+    date: row.date as string,
+    time: time ? time.slice(0, 5) : undefined, // "HH:MM:SS" → "HH:MM"
+    completed: (row.completed as boolean) ?? false,
+    completed_at: (row.completed_at as string) || undefined,
     recurrence: row.recurrence_frequency
       ? {
-          frequency: row.recurrence_frequency,
-          interval: row.recurrence_interval ?? 1,
-          days_of_week: row.recurrence_days_of_week || undefined,
-          end_date: row.recurrence_end_date || undefined,
+          frequency: row.recurrence_frequency as RecurrenceFrequency,
+          interval: (row.recurrence_interval as number) ?? 1,
+          days_of_week: (row.recurrence_days_of_week as number[]) || undefined,
+          end_date: (row.recurrence_end_date as string) || undefined,
         }
       : undefined,
     reminder:
       row.reminder_enabled != null
         ? {
-            enabled: row.reminder_enabled,
-            offset_minutes: row.reminder_offset_minutes ?? 15,
+            enabled: row.reminder_enabled as boolean,
+            offset_minutes: (row.reminder_offset_minutes as number) ?? 15,
           }
         : undefined,
-    created_at: row.created_at,
-    updated_at: row.updated_at,
+    created_at: row.created_at as string,
+    updated_at: row.updated_at as string,
   };
 }
