@@ -35,6 +35,7 @@ const config: Config = {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
         display: ["var(--font-syne)", "system-ui", "sans-serif"],
         serif: ["var(--font-cormorant)", "Georgia", "serif"],
+        nunito: ["var(--font-nunito)", "system-ui", "sans-serif"],
       },
     },
   },

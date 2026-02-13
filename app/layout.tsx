@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Syne, Cormorant_Garamond } from "next/font/google";
+import { Inter, Syne, Cormorant_Garamond, Nunito } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -9,6 +9,11 @@ const cormorant = Cormorant_Garamond({
   weight: ["400", "500"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
+});
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-nunito",
 });
 
 export const metadata: Metadata = {
@@ -23,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${syne.variable} ${cormorant.variable} font-sans`}>
+      <body className={`${inter.variable} ${syne.variable} ${cormorant.variable} ${nunito.variable} font-sans`}>
         {children}
       </body>
     </html>

@@ -32,9 +32,9 @@ export default function Home() {
               href="/baby-bets"
             />
             <ProjectCard
-              title="More Coming Soon"
-              description="New projects are in the works. Check back for more fun experiments!"
-              comingSoon
+              title="Get **it Done"
+              description="A simple, accessible task manager designed for ease of use. Large touch targets, voice input, and a friendly notebook feel."
+              href="/get-it-done"
             />
           </div>
         </section>
