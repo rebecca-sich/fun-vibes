@@ -102,6 +102,49 @@ export async function createTask(
   return dbRowToTask(data);
 }
 
+export async function createTasksBulk(
+  userSlug: string,
+  tasks: Array<{
+    title: string;
+    date: string;
+    time?: string;
+    notes?: string;
+    recurrence?: {
+      frequency: string;
+      interval: number;
+      days_of_week?: number[];
+      end_date?: string;
+    };
+    reminder?: {
+      enabled: boolean;
+      offset_minutes: number;
+    };
+  }>
+): Promise<Task[]> {
+  const db = getSupabase();
+
+  const rows = tasks.map((task) => ({
+    user_slug: userSlug,
+    title: task.title,
+    notes: task.notes || null,
+    date: task.date,
+    time: task.time || null,
+    completed: false,
+    completed_at: null,
+    recurrence_frequency: task.recurrence?.frequency || null,
+    recurrence_interval: task.recurrence?.interval ?? 1,
+    recurrence_days_of_week: task.recurrence?.days_of_week || null,
+    recurrence_end_date: task.recurrence?.end_date || null,
+    reminder_enabled: task.reminder?.enabled ?? false,
+    reminder_offset_minutes: task.reminder?.offset_minutes ?? 15,
+  }));
+
+  const { data, error } = await db.from("tasks").insert(rows).select();
+
+  if (error) throw new Error(`Failed to bulk create tasks: ${error.message}`);
+  return (data || []).map(dbRowToTask);
+}
+
 export async function getTasksByDate(
   userSlug: string,
   date: string

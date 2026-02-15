@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { PinPad } from "@/components/get-it-done/PinPad";
+import { CsvUpload } from "@/components/get-it-done/CsvUpload";
 
 interface UserProfile {
   name: string;
@@ -399,6 +400,20 @@ export default function SettingsPage() {
             )}
           </div>
         )}
+      </section>
+
+      {/* Data section */}
+      <section className="space-y-4">
+        <h2 className="text-base font-bold text-[#1A1A1A]">Data</h2>
+        <CsvUpload
+          slug={slug}
+          onStatusChange={(status) => {
+            if (status === "success") {
+              setSaveStatus("saved");
+              setTimeout(() => setSaveStatus("idle"), 2000);
+            }
+          }}
+        />
       </section>
 
       {/* Account section */}

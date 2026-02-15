@@ -40,7 +40,7 @@ export function PinPad({
         handleDigit(e.key);
       } else if (e.key === "Backspace") {
         handleBackspace();
-      } else if (e.key === "Enter" && onSubmit && pin.length >= 4) {
+      } else if (e.key === "Enter" && onSubmit && pin.length === maxLength) {
         onSubmit();
       }
     }
@@ -127,7 +127,7 @@ export function PinPad({
           <button
             type="button"
             onClick={onSubmit}
-            disabled={pin.length < 4}
+            disabled={pin.length < maxLength}
             aria-label="Submit PIN"
             className="flex h-[60px] w-[60px] items-center justify-center rounded-2xl bg-[#2563EB] text-white shadow-sm transition-colors active:bg-[#1D4ED8] focus:outline-none focus:ring-2 focus:ring-[#2563EB] focus:ring-offset-2 disabled:opacity-30 disabled:cursor-not-allowed"
           >
