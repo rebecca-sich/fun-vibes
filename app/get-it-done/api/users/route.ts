@@ -69,9 +69,9 @@ export async function POST(request: NextRequest) {
     // Hash PIN if provided
     let pinHash: string | undefined;
     if (is_protected && pin) {
-      if (!/^\d{4,6}$/.test(pin)) {
+      if (!/^\d{6}$/.test(pin)) {
         return NextResponse.json(
-          { error: "PIN must be 4-6 digits" },
+          { error: "PIN must be exactly 6 digits" },
           { status: 400 }
         );
       }

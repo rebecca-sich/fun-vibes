@@ -110,7 +110,7 @@ export default function SettingsPage() {
   function handlePinSubmit() {
     setPinError("");
     if (pinStep === "enter") {
-      if (pinInput.length < 4) return;
+      if (pinInput.length !== 6) return;
       setNewPin(pinInput);
       setPinInput("");
       setPinStep("confirm");
@@ -334,7 +334,7 @@ export default function SettingsPage() {
         {showPinSetup ? (
           <div className="rounded-xl border-2 border-[#E5E7EB] bg-white p-5 space-y-4">
             <p className="text-center text-base font-semibold text-[#1A1A1A]">
-              {pinStep === "enter" ? "Enter a new PIN" : "Confirm your PIN"}
+              {pinStep === "enter" ? "Enter a new 6-digit PIN" : "Confirm your PIN"}
             </p>
             {pinError && (
               <p className="text-center text-sm font-medium text-[#DC4F4F]">
@@ -343,7 +343,7 @@ export default function SettingsPage() {
             )}
             <PinPad
               pin={pinInput}
-              maxLength={4}
+              maxLength={6}
               onChange={setPinInput}
               onSubmit={handlePinSubmit}
               error={pinError}

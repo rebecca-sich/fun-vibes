@@ -5,6 +5,8 @@ import { verifySession } from "@/lib/get-it-done/session";
 import Link from "next/link";
 import { NavLink } from "@/components/get-it-done/NavLink";
 
+export const dynamic = "force-dynamic";
+
 export default async function AuthenticatedLayout({
   children,
   params,

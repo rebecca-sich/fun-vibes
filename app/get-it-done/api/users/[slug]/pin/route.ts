@@ -17,9 +17,9 @@ export async function PUT(
 
     const { pin, current_pin } = await request.json();
 
-    if (!pin || pin.length < 4) {
+    if (!pin || pin.length !== 6) {
       return NextResponse.json(
-        { error: "PIN must be at least 4 digits" },
+        { error: "PIN must be exactly 6 digits" },
         { status: 400 }
       );
     }

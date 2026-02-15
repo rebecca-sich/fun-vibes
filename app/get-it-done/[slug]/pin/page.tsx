@@ -34,7 +34,7 @@ export default function PinEntryPage() {
   }, [slug]);
 
   async function handleSubmit() {
-    if (pin.length < 4 || checking) return;
+    if (pin.length !== 6 || checking) return;
 
     setError("");
     setChecking(true);
@@ -65,7 +65,7 @@ export default function PinEntryPage() {
 
   // Auto-submit when PIN reaches expected length
   useEffect(() => {
-    if (pin.length >= 4 && pin.length <= 6) {
+    if (pin.length === 6) {
       // Small delay to let the dot fill animation complete
       const timer = setTimeout(() => handleSubmit(), 300);
       return () => clearTimeout(timer);

@@ -92,7 +92,7 @@ export default function OnboardingPage() {
   }
 
   const pinReady = wantPin
-    ? pinStep === "confirm" && pinConfirm === pin && pin.length >= 4
+    ? pinStep === "confirm" && pinConfirm === pin && pin.length === 6
     : true;
 
   const canSubmit =
@@ -118,7 +118,7 @@ export default function OnboardingPage() {
           email: email.trim() || undefined,
           phone_number: phone.trim() || undefined,
           pin: wantPin ? pin : undefined,
-          is_protected: wantPin && pin.length >= 4,
+          is_protected: wantPin && pin.length === 6,
         }),
       });
 
@@ -320,12 +320,12 @@ export default function OnboardingPage() {
               <div className="mt-6 flex flex-col items-center">
                 <p className="mb-4 text-sm font-medium text-[#1A1A1A]">
                   {pinStep === "enter"
-                    ? "Choose a PIN (4-6 digits)"
+                    ? "Choose a 6-digit PIN"
                     : "Confirm your PIN"}
                 </p>
                 <PinPad
                   pin={pinStep === "enter" ? pin : pinConfirm}
-                  maxLength={pin.length > 0 && pinStep === "confirm" ? pin.length : 6}
+                  maxLength={6}
                   onChange={(value) => {
                     if (pinStep === "enter") {
                       setPin(value);
@@ -336,7 +336,7 @@ export default function OnboardingPage() {
                   }}
                   onSubmit={handlePinSubmit}
                 />
-                {pinStep === "confirm" && pinConfirm === pin && pin.length >= 4 && (
+                {pinStep === "confirm" && pinConfirm === pin && pin.length === 6 && (
                   <p className="mt-3 text-sm font-medium text-[#6B9E78]">
                     PIN confirmed!
                   </p>
