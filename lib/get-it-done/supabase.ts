@@ -10,5 +10,10 @@ export function getSupabase() {
     );
   }
 
-  return createClient(url, key);
+  return createClient(url, key, {
+    global: {
+      fetch: (input, init) =>
+        fetch(input, { ...init, cache: "no-store" }),
+    },
+  });
 }

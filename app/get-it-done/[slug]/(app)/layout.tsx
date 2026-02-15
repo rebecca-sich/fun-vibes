@@ -17,7 +17,6 @@ export default async function AuthenticatedLayout({
   const { slug } = await params;
 
   const user = await getUserBySlug(slug);
-  console.log("[AUTH LAYOUT]", slug, "is_protected:", user?.is_protected, "type:", typeof user?.is_protected);
   if (!user) {
     redirect("/get-it-done");
   }
